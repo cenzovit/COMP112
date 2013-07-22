@@ -1,0 +1,74 @@
+#define SERV_PORT 8000 	/* server's port number */
+#define SERV_BLOCKS 100		/* number of blocks to buffer */ 
+
+#define MAX_MESG 80
+#define MAX_ADDR 80
+#define SERV_UDP_PORT 8005
+#define MAX_NAME 256
+
+#define TRUE 1
+#define FALSE 0
+
+int serv_port;
+//int toggle = 0;
+
+//Data Structure(linked-list) for List of active servers
+struct index{
+  char ipa[MAX_ADDR];
+  struct index* next;
+};
+
+struct fileParts{
+  char locationOne[MAX_ADDR];
+  char locationTwo[MAX_ADDR];
+  int blockNum;
+  struct fileParts* next;
+};
+
+struct fileList{
+  char fileName[MAX_NAME];
+  int fileSize;
+  struct fileParts* locations;
+  struct fileList* next;
+};
+
+
+
+/* called when udp datagram available on a socket 
+ * socket: number of socket */ 
+void udp(int sock, struct index* root); 
+
+/* get a file from storage;
+ * name: name of file (in local machine)
+ * content: an array of content (result parameter)
+ * size: size of file */ 
+int get(char *name, char **content, int *s); 
+
+/* put a file into storage. 
+ * name: local name of file. 
+ * content: a character array of content. 
+ * size: size of local file. */ 
+int put(char *name, char *content, int size); 
+
+/* delete a file from storage 
+ * name: name of file (on one machine) */ 
+int del(char *name); 
+
+void updateList(struct index* root, char* cli_dotted);
+
+void updateFileList(struct fileList* root, struct fileList* newFile);
+
+void sendToServer(char* ip, int port, char* payload);
+
+int redundancyCheck(int sockfd, struct index* root);
+
+int udpGetPart(int sockfd, char** contents, int block, struct index* root);
+
+int repairRedundancy(struct index* ipRootList, struct fileList* root, int udpsock);
+
+void deleteBlocks(char* filename, struct fileParts* parts);
+
+int compareLists(struct index* rootOne, struct index* rootTwo);
+
+int repairs(int sockfd);
+

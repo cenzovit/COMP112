@@ -1,0 +1,27 @@
+Strategies
+- advertise and distribute
+  - send advertisements to other servers, e.g., every 2 seconds. 
+  - when you receive an advertisement, record resource record. 
+  - when you want to store something, 
+    - plan based upon advertised resources. 
+    - make directed requests. 
+    - wait for acknowledgement. 
+  - "subscription-type model"
+- spray and acknowledge. 
+  - broadcast every block. 
+  - wait for two acknowledgements
+  - retract the others. 
+  - if don't get ack, in a specific time, assume that it isn't stored. 
+
+Complicated: recovery in spray in ack
+- all servers immediately fill. 
+- If I have a block, and it's stored in two other places, 
+  I want to delete mine. 
+- can ask rest of servers whether it's ok to delete. 
+- semaphore-like (global) ack required. 
+
+Real complexity: 
+- state analysis of a distributed system 
+- do you need hierarchy? 
+- do you need synchronization? 
+
